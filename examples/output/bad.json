@@ -1,0 +1,843 @@
+{
+  "tool": "storage-layout-check",
+  "version": "1.0.0",
+  "input": {
+    "old": {
+      "file": "examples/v1/layout.json",
+      "bytes": 7604,
+      "lines": 327,
+      "form": "layout",
+      "contract": null
+    },
+    "new": {
+      "file": "examples/v2-bad/layout.json",
+      "bytes": 7584,
+      "lines": 324,
+      "form": "layout",
+      "contract": null
+    }
+  },
+  "summary": {
+    "old": {
+      "variables": 15,
+      "contracts": 4,
+      "namespaces": 2,
+      "namespaced": 5
+    },
+    "new": {
+      "variables": 16,
+      "contracts": 4,
+      "namespaces": 1,
+      "namespaced": 4
+    }
+  },
+  "totals": {
+    "findings": 22,
+    "byLevel": {
+      "error": 20,
+      "warning": 1,
+      "info": 1
+    },
+    "hidden": 0
+  },
+  "rules": [
+    {
+      "id": "layout-unreadable",
+      "level": "error",
+      "kind": "input",
+      "findings": 0
+    },
+    {
+      "id": "layout-incomplete",
+      "level": "warning",
+      "kind": "input",
+      "findings": 0
+    },
+    {
+      "id": "variable-removed",
+      "level": "error",
+      "kind": "documented",
+      "findings": 1
+    },
+    {
+      "id": "variable-moved",
+      "level": "error",
+      "kind": "documented",
+      "findings": 10
+    },
+    {
+      "id": "type-changed",
+      "level": "error",
+      "kind": "documented",
+      "findings": 5
+    },
+    {
+      "id": "variable-inserted",
+      "level": "error",
+      "kind": "documented",
+      "findings": 1
+    },
+    {
+      "id": "gap-mismatch",
+      "level": "error",
+      "kind": "documented",
+      "findings": 1
+    },
+    {
+      "id": "gap-removed",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 1
+    },
+    {
+      "id": "inheritance-order-changed",
+      "level": "error",
+      "kind": "documented",
+      "findings": 1
+    },
+    {
+      "id": "namespace-removed",
+      "level": "error",
+      "kind": "documented",
+      "findings": 1
+    },
+    {
+      "id": "proxy-slot-overlap",
+      "level": "error",
+      "kind": "documented",
+      "findings": 0
+    },
+    {
+      "id": "variable-renamed",
+      "level": "info",
+      "kind": "documented",
+      "findings": 1
+    },
+    {
+      "id": "type-renamed",
+      "level": "info",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "type-extended",
+      "level": "info",
+      "kind": "best practice",
+      "findings": 0
+    }
+  ],
+  "config": {
+    "minSeverity": "info",
+    "failOn": "error"
+  },
+  "findings": [
+    {
+      "id": "variable-removed",
+      "severity": "error",
+      "message": "Vault.paused (bool) at slot 113, offset 0 is not in the new layout, under its name or at its place. Its value stays in storage, and a variable that takes its place starts with that value. A variable turned into a constant or an immutable leaves storage too.",
+      "side": "old",
+      "file": "examples/v1/layout.json",
+      "line": 86,
+      "column": 16,
+      "at": "examples/v1/layout.json:86",
+      "contract": "Vault",
+      "variable": "paused",
+      "namespace": null,
+      "fix": "Keep the variable at its place, under its old name or a new one; if it is no longer used, leave it declared and unused.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "New variables go at the end; a variable added before existing ones, or a variable removed, breaks the layout of what follows it.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        },
+        {
+          "text": "A variable removed from the end leaves its storage as it was, and a variable added there later starts with the old value.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        },
+        {
+          "text": "Constant, immutable and transient variables are kept elsewhere and play no part in the storage layout, so they are not in it.",
+          "source": "Layout of State Variables in Storage and Transient Storage (Solidity documentation)",
+          "url": "https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "namespace-removed",
+      "severity": "error",
+      "message": "The namespace erc7201:example.vault.legacy of the old layout (1 variable) is not in the new one. Its values stay in storage, and a namespace with the same id added later starts with them.",
+      "side": "old",
+      "file": "examples/v1/layout.json",
+      "line": 316,
+      "column": 5,
+      "at": "examples/v1/layout.json:316",
+      "contract": null,
+      "variable": null,
+      "namespace": null,
+      "fix": "Keep the namespace struct with its annotation and its members, even those no longer used.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "Namespaced storage puts the variables of a contract in structs annotated with an erc7201 storage location, and a change inside a namespace is held to the same rules as a change to the ordinary layout.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        },
+        {
+          "text": "ERC-7201 marks a namespace with the annotation @custom:storage-location erc7201:<id> and derives its root slot from the id; the variables of the namespace follow the ordinary layout rules from that root.",
+          "source": "ERC-7201: Namespaced Storage Layout",
+          "url": "https://eips.ethereum.org/EIPS/eip-7201"
+        },
+        {
+          "text": "The layout format of OpenZeppelin Upgrades adds an optional namespaces object of storage lists to the compiler form, and lets an enum type list its members as strings.",
+          "source": "The storage layout format of OpenZeppelin Upgrades (packages/core/src/storage/layout.ts)",
+          "url": "https://github.com/OpenZeppelin/openzeppelin-upgrades/blob/master/packages/core/src/storage/layout.ts"
+        },
+        {
+          "text": "A variable removed from the end leaves its storage as it was, and a variable added there later starts with the old value.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "inheritance-order-changed",
+      "severity": "error",
+      "message": "The contracts that hold storage come in the order AccessBase, FeeBase, ListBase and Vault in the old layout and AccessBase, ListBase, FeeBase and Vault in the new one. Their variables are laid out in the order of the base contracts, so the variables of the contracts that changed place move.",
+      "side": "new",
+      "file": "examples/v2-bad/layout.json",
+      "line": 30,
+      "column": 16,
+      "at": "examples/v2-bad/layout.json:30",
+      "contract": "ListBase",
+      "variable": "allowed",
+      "namespace": null,
+      "fix": "Keep the base contracts in their old order; a new base contract with storage needs room that does not move the others, such as a namespace.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "Under inheritance the variables are ordered by the C3 linearization of the contracts, beginning with the most base-ward one, so the order of the base contracts decides where each variable is kept.",
+          "source": "Layout of State Variables in Storage and Transient Storage (Solidity documentation)",
+          "url": "https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html"
+        },
+        {
+          "text": "Swapping the order of the base contracts, or adding a base contract, changes where the variables are kept.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "variable-moved",
+      "severity": "error",
+      "message": "ListBase.allowed moves from slot 100, offset 0 to slot 50, offset 0, so after the upgrade it reads what the old version stored there and its old value is left behind.",
+      "side": "new",
+      "file": "examples/v2-bad/layout.json",
+      "line": 30,
+      "column": 16,
+      "at": "examples/v2-bad/layout.json:30",
+      "contract": "ListBase",
+      "variable": "allowed",
+      "namespace": null,
+      "fix": "Declare the variables in the old order and keep every base contract as it was; add new variables after the last one, or take their slots from a gap.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "State variables are placed one after another from slot 0, and small values share a slot where they fit, so the place of a variable follows from every variable declared before it.",
+          "source": "Layout of State Variables in Storage and Transient Storage (Solidity documentation)",
+          "url": "https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html"
+        },
+        {
+          "text": "A new version may not change the order in which the state variables are declared or their types; doing so mixes up the stored values.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        },
+        {
+          "text": "Two versions of a logic contract collide when the new one keeps another variable where the old one kept a value, so a new version extends storage and never modifies it.",
+          "source": "Proxy Upgrade Pattern (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/proxies"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "variable-moved",
+      "severity": "error",
+      "message": "FeeBase.feeRate moves from slot 50, offset 0 to slot 51, offset 0, so after the upgrade it reads what the old version stored there and its old value is left behind.",
+      "side": "new",
+      "file": "examples/v2-bad/layout.json",
+      "line": 38,
+      "column": 16,
+      "at": "examples/v2-bad/layout.json:38",
+      "contract": "FeeBase",
+      "variable": "feeRate",
+      "namespace": null,
+      "fix": "Declare the variables in the old order and keep every base contract as it was; add new variables after the last one, or take their slots from a gap.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "State variables are placed one after another from slot 0, and small values share a slot where they fit, so the place of a variable follows from every variable declared before it.",
+          "source": "Layout of State Variables in Storage and Transient Storage (Solidity documentation)",
+          "url": "https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html"
+        },
+        {
+          "text": "A new version may not change the order in which the state variables are declared or their types; doing so mixes up the stored values.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        },
+        {
+          "text": "Two versions of a logic contract collide when the new one keeps another variable where the old one kept a value, so a new version extends storage and never modifies it.",
+          "source": "Proxy Upgrade Pattern (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/proxies"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "variable-moved",
+      "severity": "error",
+      "message": "FeeBase.treasury moves from slot 50, offset 2 to slot 51, offset 2, so after the upgrade it reads what the old version stored there and its old value is left behind.",
+      "side": "new",
+      "file": "examples/v2-bad/layout.json",
+      "line": 46,
+      "column": 16,
+      "at": "examples/v2-bad/layout.json:46",
+      "contract": "FeeBase",
+      "variable": "treasury",
+      "namespace": null,
+      "fix": "Declare the variables in the old order and keep every base contract as it was; add new variables after the last one, or take their slots from a gap.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "State variables are placed one after another from slot 0, and small values share a slot where they fit, so the place of a variable follows from every variable declared before it.",
+          "source": "Layout of State Variables in Storage and Transient Storage (Solidity documentation)",
+          "url": "https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html"
+        },
+        {
+          "text": "A new version may not change the order in which the state variables are declared or their types; doing so mixes up the stored values.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        },
+        {
+          "text": "Two versions of a logic contract collide when the new one keeps another variable where the old one kept a value, so a new version extends storage and never modifies it.",
+          "source": "Proxy Upgrade Pattern (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/proxies"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "gap-mismatch",
+      "severity": "error",
+      "message": "The gap FeeBase.__gap kept its 49 slots, while the variables of FeeBase before it take 1 more slot, so the variables after the gap move 1 slot further. A gap shrinks by exactly the slots the new variables take.",
+      "side": "new",
+      "file": "examples/v2-bad/layout.json",
+      "line": 62,
+      "column": 16,
+      "at": "examples/v2-bad/layout.json:62",
+      "contract": "FeeBase",
+      "variable": "__gap",
+      "namespace": null,
+      "fix": "Cut the gap by exactly the slots the new variables take, counting how they pack.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "A storage gap is a fixed-size array named __gap, or with a name starting with __gap_, that reserves slots in a base contract; when variables are added, the gap is cut by the slots they take under the packing rules.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        },
+        {
+          "text": "A variable added to a base contract takes the slot that a variable of the child had, unless the base reserved room for it.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "variable-inserted",
+      "severity": "error",
+      "message": "Vault.version is new and sits at slot 102, offset 0, where the old layout keeps ListBase.__gap, so it starts with the value stored there. New variables go after the last one, or into the gap of their own contract.",
+      "side": "new",
+      "file": "examples/v2-bad/layout.json",
+      "line": 70,
+      "column": 16,
+      "at": "examples/v2-bad/layout.json:70",
+      "contract": "Vault",
+      "variable": "version",
+      "namespace": null,
+      "fix": "Declare new variables after the last one, or in a base contract take their slots from its gap.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "New variables go at the end; a variable added before existing ones, or a variable removed, breaks the layout of what follows it.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        },
+        {
+          "text": "A variable added to a base contract takes the slot that a variable of the child had, unless the base reserved room for it.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        },
+        {
+          "text": "Two versions of a logic contract collide when the new one keeps another variable where the old one kept a value, so a new version extends storage and never modifies it.",
+          "source": "Proxy Upgrade Pattern (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/proxies"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "type-changed",
+      "severity": "error",
+      "message": "The type of Vault.balances changes: the key type of the mapping changes: address becomes uint256, a type with another storage form, so stored entries are looked up under keys of another type.",
+      "side": "new",
+      "file": "examples/v2-bad/layout.json",
+      "line": 78,
+      "column": 16,
+      "at": "examples/v2-bad/layout.json:78",
+      "contract": "Vault",
+      "variable": "balances",
+      "namespace": null,
+      "fix": "Keep the old type; add a variable of the new type after the last one and move the data in an upgrade step.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "A new version may not change the order in which the state variables are declared or their types; doing so mixes up the stored values.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        },
+        {
+          "text": "The size of a value type sets how many bytes it takes and whether the next variable shares its slot; a struct or an array always opens a new slot, and so does the variable after it.",
+          "source": "Layout of State Variables in Storage and Transient Storage (Solidity documentation)",
+          "url": "https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html"
+        },
+        {
+          "text": "A mapping or a dynamic array takes one slot in the sequence, and its contents are kept at slots computed with keccak256 from that slot and, for a mapping, from the key.",
+          "source": "Layout of State Variables in Storage and Transient Storage (Solidity documentation)",
+          "url": "https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "variable-moved",
+      "severity": "error",
+      "message": "Vault.balances moves from slot 110, offset 0 to slot 103, offset 0, so after the upgrade it reads what the old version stored there and its old value is left behind.",
+      "side": "new",
+      "file": "examples/v2-bad/layout.json",
+      "line": 78,
+      "column": 16,
+      "at": "examples/v2-bad/layout.json:78",
+      "contract": "Vault",
+      "variable": "balances",
+      "namespace": null,
+      "fix": "Declare the variables in the old order and keep every base contract as it was; add new variables after the last one, or take their slots from a gap.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "State variables are placed one after another from slot 0, and small values share a slot where they fit, so the place of a variable follows from every variable declared before it.",
+          "source": "Layout of State Variables in Storage and Transient Storage (Solidity documentation)",
+          "url": "https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html"
+        },
+        {
+          "text": "A new version may not change the order in which the state variables are declared or their types; doing so mixes up the stored values.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        },
+        {
+          "text": "Two versions of a logic contract collide when the new one keeps another variable where the old one kept a value, so a new version extends storage and never modifies it.",
+          "source": "Proxy Upgrade Pattern (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/proxies"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "variable-moved",
+      "severity": "error",
+      "message": "Vault.totalShares moves from slot 111, offset 0 to slot 104, offset 0, so after the upgrade it reads what the old version stored there and its old value is left behind.",
+      "side": "new",
+      "file": "examples/v2-bad/layout.json",
+      "line": 86,
+      "column": 16,
+      "at": "examples/v2-bad/layout.json:86",
+      "contract": "Vault",
+      "variable": "totalShares",
+      "namespace": null,
+      "fix": "Declare the variables in the old order and keep every base contract as it was; add new variables after the last one, or take their slots from a gap.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "State variables are placed one after another from slot 0, and small values share a slot where they fit, so the place of a variable follows from every variable declared before it.",
+          "source": "Layout of State Variables in Storage and Transient Storage (Solidity documentation)",
+          "url": "https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html"
+        },
+        {
+          "text": "A new version may not change the order in which the state variables are declared or their types; doing so mixes up the stored values.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        },
+        {
+          "text": "Two versions of a logic contract collide when the new one keeps another variable where the old one kept a value, so a new version extends storage and never modifies it.",
+          "source": "Proxy Upgrade Pattern (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/proxies"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "type-changed",
+      "severity": "error",
+      "message": "The type of Vault.positions changes: the value type of the mapping changes: member since of struct Vault.Position changes: uint64 becomes uint128: the size changes from 8 bytes to 16 bytes, so the variable and what is packed next to it are read at other bytes.",
+      "side": "new",
+      "file": "examples/v2-bad/layout.json",
+      "line": 94,
+      "column": 16,
+      "at": "examples/v2-bad/layout.json:94",
+      "contract": "Vault",
+      "variable": "positions",
+      "namespace": null,
+      "fix": "Keep the old type; add a variable of the new type after the last one and move the data in an upgrade step.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "A new version may not change the order in which the state variables are declared or their types; doing so mixes up the stored values.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        },
+        {
+          "text": "The size of a value type sets how many bytes it takes and whether the next variable shares its slot; a struct or an array always opens a new slot, and so does the variable after it.",
+          "source": "Layout of State Variables in Storage and Transient Storage (Solidity documentation)",
+          "url": "https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html"
+        },
+        {
+          "text": "A mapping or a dynamic array takes one slot in the sequence, and its contents are kept at slots computed with keccak256 from that slot and, for a mapping, from the key.",
+          "source": "Layout of State Variables in Storage and Transient Storage (Solidity documentation)",
+          "url": "https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "variable-moved",
+      "severity": "error",
+      "message": "Vault.positions moves from slot 112, offset 0 to slot 105, offset 0, so after the upgrade it reads what the old version stored there and its old value is left behind.",
+      "side": "new",
+      "file": "examples/v2-bad/layout.json",
+      "line": 94,
+      "column": 16,
+      "at": "examples/v2-bad/layout.json:94",
+      "contract": "Vault",
+      "variable": "positions",
+      "namespace": null,
+      "fix": "Declare the variables in the old order and keep every base contract as it was; add new variables after the last one, or take their slots from a gap.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "State variables are placed one after another from slot 0, and small values share a slot where they fit, so the place of a variable follows from every variable declared before it.",
+          "source": "Layout of State Variables in Storage and Transient Storage (Solidity documentation)",
+          "url": "https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html"
+        },
+        {
+          "text": "A new version may not change the order in which the state variables are declared or their types; doing so mixes up the stored values.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        },
+        {
+          "text": "Two versions of a logic contract collide when the new one keeps another variable where the old one kept a value, so a new version extends storage and never modifies it.",
+          "source": "Proxy Upgrade Pattern (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/proxies"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "type-changed",
+      "severity": "error",
+      "message": "The type of Vault.mode changes: the members of enum Vault.Mode change: Paused is removed, so a stored number names another member or none.",
+      "side": "new",
+      "file": "examples/v2-bad/layout.json",
+      "line": 102,
+      "column": 16,
+      "at": "examples/v2-bad/layout.json:102",
+      "contract": "Vault",
+      "variable": "mode",
+      "namespace": null,
+      "fix": "Keep the old type; add a variable of the new type after the last one and move the data in an upgrade step.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "A new version may not change the order in which the state variables are declared or their types; doing so mixes up the stored values.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        },
+        {
+          "text": "The size of a value type sets how many bytes it takes and whether the next variable shares its slot; a struct or an array always opens a new slot, and so does the variable after it.",
+          "source": "Layout of State Variables in Storage and Transient Storage (Solidity documentation)",
+          "url": "https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html"
+        },
+        {
+          "text": "A mapping or a dynamic array takes one slot in the sequence, and its contents are kept at slots computed with keccak256 from that slot and, for a mapping, from the key.",
+          "source": "Layout of State Variables in Storage and Transient Storage (Solidity documentation)",
+          "url": "https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "variable-moved",
+      "severity": "error",
+      "message": "Vault.mode moves from slot 113, offset 1 to slot 106, offset 0, so after the upgrade it reads what the old version stored there and its old value is left behind.",
+      "side": "new",
+      "file": "examples/v2-bad/layout.json",
+      "line": 102,
+      "column": 16,
+      "at": "examples/v2-bad/layout.json:102",
+      "contract": "Vault",
+      "variable": "mode",
+      "namespace": null,
+      "fix": "Declare the variables in the old order and keep every base contract as it was; add new variables after the last one, or take their slots from a gap.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "State variables are placed one after another from slot 0, and small values share a slot where they fit, so the place of a variable follows from every variable declared before it.",
+          "source": "Layout of State Variables in Storage and Transient Storage (Solidity documentation)",
+          "url": "https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html"
+        },
+        {
+          "text": "A new version may not change the order in which the state variables are declared or their types; doing so mixes up the stored values.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        },
+        {
+          "text": "Two versions of a logic contract collide when the new one keeps another variable where the old one kept a value, so a new version extends storage and never modifies it.",
+          "source": "Proxy Upgrade Pattern (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/proxies"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "type-changed",
+      "severity": "error",
+      "message": "The type of Vault.history changes: uint256[3] becomes uint256[4]: the length changes from 3 to 4, so the array takes another number of slots.",
+      "side": "new",
+      "file": "examples/v2-bad/layout.json",
+      "line": 110,
+      "column": 16,
+      "at": "examples/v2-bad/layout.json:110",
+      "contract": "Vault",
+      "variable": "history",
+      "namespace": null,
+      "fix": "Keep the old type; add a variable of the new type after the last one and move the data in an upgrade step.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "A new version may not change the order in which the state variables are declared or their types; doing so mixes up the stored values.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        },
+        {
+          "text": "The size of a value type sets how many bytes it takes and whether the next variable shares its slot; a struct or an array always opens a new slot, and so does the variable after it.",
+          "source": "Layout of State Variables in Storage and Transient Storage (Solidity documentation)",
+          "url": "https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html"
+        },
+        {
+          "text": "A mapping or a dynamic array takes one slot in the sequence, and its contents are kept at slots computed with keccak256 from that slot and, for a mapping, from the key.",
+          "source": "Layout of State Variables in Storage and Transient Storage (Solidity documentation)",
+          "url": "https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "variable-moved",
+      "severity": "error",
+      "message": "Vault.history moves from slot 114, offset 0 to slot 107, offset 0, so after the upgrade it reads what the old version stored there and its old value is left behind.",
+      "side": "new",
+      "file": "examples/v2-bad/layout.json",
+      "line": 110,
+      "column": 16,
+      "at": "examples/v2-bad/layout.json:110",
+      "contract": "Vault",
+      "variable": "history",
+      "namespace": null,
+      "fix": "Declare the variables in the old order and keep every base contract as it was; add new variables after the last one, or take their slots from a gap.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "State variables are placed one after another from slot 0, and small values share a slot where they fit, so the place of a variable follows from every variable declared before it.",
+          "source": "Layout of State Variables in Storage and Transient Storage (Solidity documentation)",
+          "url": "https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html"
+        },
+        {
+          "text": "A new version may not change the order in which the state variables are declared or their types; doing so mixes up the stored values.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        },
+        {
+          "text": "Two versions of a logic contract collide when the new one keeps another variable where the old one kept a value, so a new version extends storage and never modifies it.",
+          "source": "Proxy Upgrade Pattern (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/proxies"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "variable-moved",
+      "severity": "error",
+      "message": "Vault.note moves from slot 117, offset 0 to slot 111, offset 0, so after the upgrade it reads what the old version stored there and its old value is left behind.",
+      "side": "new",
+      "file": "examples/v2-bad/layout.json",
+      "line": 118,
+      "column": 16,
+      "at": "examples/v2-bad/layout.json:118",
+      "contract": "Vault",
+      "variable": "note",
+      "namespace": null,
+      "fix": "Declare the variables in the old order and keep every base contract as it was; add new variables after the last one, or take their slots from a gap.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "State variables are placed one after another from slot 0, and small values share a slot where they fit, so the place of a variable follows from every variable declared before it.",
+          "source": "Layout of State Variables in Storage and Transient Storage (Solidity documentation)",
+          "url": "https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html"
+        },
+        {
+          "text": "A new version may not change the order in which the state variables are declared or their types; doing so mixes up the stored values.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        },
+        {
+          "text": "Two versions of a logic contract collide when the new one keeps another variable where the old one kept a value, so a new version extends storage and never modifies it.",
+          "source": "Proxy Upgrade Pattern (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/proxies"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "type-changed",
+      "severity": "error",
+      "message": "The type of Vault.limit changes: int128 becomes uint128: the same size with another signedness, so a stored value is read as another number.",
+      "side": "new",
+      "file": "examples/v2-bad/layout.json",
+      "line": 126,
+      "column": 16,
+      "at": "examples/v2-bad/layout.json:126",
+      "contract": "Vault",
+      "variable": "limit",
+      "namespace": null,
+      "fix": "Keep the old type; add a variable of the new type after the last one and move the data in an upgrade step.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "A new version may not change the order in which the state variables are declared or their types; doing so mixes up the stored values.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        },
+        {
+          "text": "The size of a value type sets how many bytes it takes and whether the next variable shares its slot; a struct or an array always opens a new slot, and so does the variable after it.",
+          "source": "Layout of State Variables in Storage and Transient Storage (Solidity documentation)",
+          "url": "https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html"
+        },
+        {
+          "text": "A mapping or a dynamic array takes one slot in the sequence, and its contents are kept at slots computed with keccak256 from that slot and, for a mapping, from the key.",
+          "source": "Layout of State Variables in Storage and Transient Storage (Solidity documentation)",
+          "url": "https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "variable-moved",
+      "severity": "error",
+      "message": "Vault.limit moves from slot 118, offset 0 to slot 112, offset 0, so after the upgrade it reads what the old version stored there and its old value is left behind.",
+      "side": "new",
+      "file": "examples/v2-bad/layout.json",
+      "line": 126,
+      "column": 16,
+      "at": "examples/v2-bad/layout.json:126",
+      "contract": "Vault",
+      "variable": "limit",
+      "namespace": null,
+      "fix": "Declare the variables in the old order and keep every base contract as it was; add new variables after the last one, or take their slots from a gap.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "State variables are placed one after another from slot 0, and small values share a slot where they fit, so the place of a variable follows from every variable declared before it.",
+          "source": "Layout of State Variables in Storage and Transient Storage (Solidity documentation)",
+          "url": "https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html"
+        },
+        {
+          "text": "A new version may not change the order in which the state variables are declared or their types; doing so mixes up the stored values.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        },
+        {
+          "text": "Two versions of a logic contract collide when the new one keeps another variable where the old one kept a value, so a new version extends storage and never modifies it.",
+          "source": "Proxy Upgrade Pattern (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/proxies"
+        }
+      ],
+      "own": null
+    },
+    {
+      "id": "gap-removed",
+      "severity": "warning",
+      "message": "The gap ListBase.__gap (uint256[9]) at slot 101, offset 0 is not in the new layout, so ListBase has no room left for new variables that would not move the variables declared after it. This is a best practice of this tool, not a rule in the Solidity or OpenZeppelin documentation.",
+      "side": "old",
+      "file": "examples/v1/layout.json",
+      "line": 54,
+      "column": 16,
+      "at": "examples/v1/layout.json:54",
+      "contract": "ListBase",
+      "variable": "__gap",
+      "namespace": null,
+      "fix": "Keep a gap in every base contract that may grow; drop it only when the variables that replace it take exactly its slots.",
+      "kind": "best practice",
+      "basis": [
+        {
+          "text": "A storage gap is a fixed-size array named __gap, or with a name starting with __gap_, that reserves slots in a base contract; when variables are added, the gap is cut by the slots they take under the packing rules.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        }
+      ],
+      "own": "keeping a gap in every contract that had one is a best practice of this tool, not a rule in the Solidity or OpenZeppelin documentation; the OpenZeppelin page describes gaps as a convention"
+    },
+    {
+      "id": "variable-renamed",
+      "severity": "info",
+      "message": "rate in namespace erc7201:example.vault.rewards is renamed ratePerSecond at the same slot 0, offset 0 with the same storage form, so ratePerSecond starts with the value of rate.",
+      "side": "new",
+      "file": "examples/v2-bad/layout.json",
+      "line": 293,
+      "column": 18,
+      "at": "examples/v2-bad/layout.json:293",
+      "contract": null,
+      "variable": "ratePerSecond",
+      "namespace": "erc7201:example.vault.rewards",
+      "fix": "Confirm that the variable means the same as before, since it starts with the old value.",
+      "kind": "documented",
+      "basis": [
+        {
+          "text": "A renamed variable keeps the value of the old one after the upgrade, which is right only when the two mean the same.",
+          "source": "Writing Upgradeable Contracts (OpenZeppelin Upgrades Plugins documentation)",
+          "url": "https://docs.openzeppelin.com/upgrades-plugins/writing-upgradeable"
+        }
+      ],
+      "own": null
+    }
+  ],
+  "notes": [],
+  "notice": "This report is an input to a review before an upgrade is deployed: not a security audit and not a guarantee that the upgrade is safe.",
+  "result": {
+    "pass": false,
+    "failOn": "error",
+    "text": "FAIL - 20 findings at or above error (20 error, 1 warning, 1 info)"
+  }
+}

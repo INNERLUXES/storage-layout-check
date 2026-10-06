@@ -1,0 +1,174 @@
+[
+  {
+    "id": "layout-unreadable",
+    "severity": "error",
+    "kind": "input",
+    "summary": "a file is not JSON the reader can follow, or holds no storage layout in a form the tool reads (a layout object, an artifact with storageLayout, a compiler output with contracts)",
+    "fix": "Give the storage layout as the compiler, forge inspect or an artifact writes it (docs/inputs.md), and fix the line named.",
+    "basis": [
+      "layout-json",
+      "compiler-output",
+      "forge-inspect-field"
+    ],
+    "own": null
+  },
+  {
+    "id": "layout-incomplete",
+    "severity": "warning",
+    "kind": "input",
+    "summary": "a variable or a type of a layout lacks what the comparison needs (a label, slot, offset or type, a size, a type that is not in types); that part was not compared",
+    "fix": "Give the layout as the compiler writes it, or compare that part by hand.",
+    "basis": [
+      "layout-json"
+    ],
+    "own": null
+  },
+  {
+    "id": "variable-removed",
+    "severity": "error",
+    "kind": "documented",
+    "summary": "a variable of the old layout is not in the new one, under its name or at its place",
+    "fix": "Keep the variable at its place, under its old name or a new one; if it is no longer used, leave it declared and unused.",
+    "basis": [
+      "oz-insert-remove",
+      "oz-remove-end",
+      "layout-not-in-storage"
+    ],
+    "own": null
+  },
+  {
+    "id": "variable-moved",
+    "severity": "error",
+    "kind": "documented",
+    "summary": "a variable is at another slot or offset in the new layout",
+    "fix": "Declare the variables in the old order and keep every base contract as it was; add new variables after the last one, or take their slots from a gap.",
+    "basis": [
+      "layout-sequential",
+      "oz-order-type",
+      "oz-collision"
+    ],
+    "own": null
+  },
+  {
+    "id": "type-changed",
+    "severity": "error",
+    "kind": "documented",
+    "summary": "a variable keeps its name and gets a type with another storage form: another size or signedness, another mapping key or value, other struct members, another array length, or enum members removed or reordered",
+    "fix": "Keep the old type; add a variable of the new type after the last one and move the data in an upgrade step.",
+    "basis": [
+      "oz-order-type",
+      "layout-size-packing",
+      "layout-mapping-hash"
+    ],
+    "own": null
+  },
+  {
+    "id": "variable-inserted",
+    "severity": "error",
+    "kind": "documented",
+    "summary": "a new variable takes storage that a variable of the old layout used, as happens when it is declared before existing ones or in a base contract with no room",
+    "fix": "Declare new variables after the last one, or in a base contract take their slots from its gap.",
+    "basis": [
+      "oz-insert-remove",
+      "oz-base-add",
+      "oz-collision"
+    ],
+    "own": null
+  },
+  {
+    "id": "gap-mismatch",
+    "severity": "error",
+    "kind": "documented",
+    "summary": "the slots added before a storage gap in a contract are not the slots the gap was cut by, so what follows the gap moves",
+    "fix": "Cut the gap by exactly the slots the new variables take, counting how they pack.",
+    "basis": [
+      "oz-gap",
+      "oz-base-add"
+    ],
+    "own": null
+  },
+  {
+    "id": "gap-removed",
+    "severity": "warning",
+    "kind": "best practice",
+    "summary": "a contract that had a storage gap has none in the new layout",
+    "fix": "Keep a gap in every base contract that may grow; drop it only when the variables that replace it take exactly its slots.",
+    "basis": [
+      "oz-gap"
+    ],
+    "own": "keeping a gap in every contract that had one is a best practice of this tool, not a rule in the Solidity or OpenZeppelin documentation; the OpenZeppelin page describes gaps as a convention"
+  },
+  {
+    "id": "inheritance-order-changed",
+    "severity": "error",
+    "kind": "documented",
+    "summary": "the contracts that hold storage come in another order in the new layout",
+    "fix": "Keep the base contracts in their old order; a new base contract with storage needs room that does not move the others, such as a namespace.",
+    "basis": [
+      "layout-inheritance",
+      "oz-base-order"
+    ],
+    "own": null
+  },
+  {
+    "id": "namespace-removed",
+    "severity": "error",
+    "kind": "documented",
+    "summary": "an ERC-7201 namespace of the old layout is not in the new one",
+    "fix": "Keep the namespace struct with its annotation and its members, even those no longer used.",
+    "basis": [
+      "oz-namespace",
+      "erc7201-root",
+      "oz-layout-format",
+      "oz-remove-end"
+    ],
+    "own": null
+  },
+  {
+    "id": "proxy-slot-overlap",
+    "severity": "error",
+    "kind": "documented",
+    "summary": "a variable of the new layout takes a slot that ERC-1967 sets aside for a proxy (the logic contract, the beacon or the admin)",
+    "fix": "Move the variable, or the base slot of a custom layout, away from the ERC-1967 slots.",
+    "basis": [
+      "erc1967-slots",
+      "layout-sequential"
+    ],
+    "own": null
+  },
+  {
+    "id": "variable-renamed",
+    "severity": "info",
+    "kind": "documented",
+    "summary": "a variable of the old layout has a new name, or is declared in another contract, at the same slot and offset with the same storage form, so it keeps the old value",
+    "fix": "Confirm that the variable means the same as before, since it starts with the old value.",
+    "basis": [
+      "oz-rename"
+    ],
+    "own": null
+  },
+  {
+    "id": "type-renamed",
+    "severity": "info",
+    "kind": "best practice",
+    "summary": "a variable keeps its place and its storage form under another type name: a contract type and address, string and bytes, a renamed struct or enum, a user-defined value type",
+    "fix": "Confirm that the stored values mean the same under the new type.",
+    "basis": [
+      "layout-bytes-string",
+      "layout-json"
+    ],
+    "own": "reading these types as one storage form is a best practice of this tool, not a rule in the Solidity or OpenZeppelin documentation; it rests on the sizes and encodings in the layout and on the page that says bytes and string are encoded the same way"
+  },
+  {
+    "id": "type-extended",
+    "severity": "info",
+    "kind": "best practice",
+    "summary": "members were appended to a struct stored as a mapping value or within its old size, or to an enum, and what was stored keeps its place",
+    "fix": "Confirm that the code handles what was stored before the upgrade: appended struct members read as zero there.",
+    "basis": [
+      "layout-mapping-hash",
+      "oz-layout-format"
+    ],
+    "own": "accepting appended members is a best practice of this tool, not a rule in the Solidity or OpenZeppelin documentation; it follows from the layout rules for mapping values, which the OpenZeppelin page does not discuss"
+  }
+]

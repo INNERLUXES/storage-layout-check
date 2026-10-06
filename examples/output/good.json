@@ -1,0 +1,202 @@
+{
+  "tool": "storage-layout-check",
+  "version": "1.0.0",
+  "input": {
+    "old": {
+      "file": "examples/v1/layout.json",
+      "bytes": 7604,
+      "lines": 327,
+      "form": "layout",
+      "contract": null
+    },
+    "new": {
+      "file": "examples/v2-good/layout.json",
+      "bytes": 8751,
+      "lines": 378,
+      "form": "layout",
+      "contract": null
+    }
+  },
+  "summary": {
+    "old": {
+      "variables": 15,
+      "contracts": 4,
+      "namespaces": 2,
+      "namespaced": 5
+    },
+    "new": {
+      "variables": 18,
+      "contracts": 4,
+      "namespaces": 3,
+      "namespaced": 7
+    }
+  },
+  "totals": {
+    "findings": 4,
+    "byLevel": {
+      "error": 0,
+      "warning": 0,
+      "info": 4
+    },
+    "hidden": 0
+  },
+  "rules": [
+    {
+      "id": "layout-unreadable",
+      "level": "error",
+      "kind": "input",
+      "findings": 0
+    },
+    {
+      "id": "layout-incomplete",
+      "level": "warning",
+      "kind": "input",
+      "findings": 0
+    },
+    {
+      "id": "variable-removed",
+      "level": "error",
+      "kind": "documented",
+      "findings": 0
+    },
+    {
+      "id": "variable-moved",
+      "level": "error",
+      "kind": "documented",
+      "findings": 0
+    },
+    {
+      "id": "type-changed",
+      "level": "error",
+      "kind": "documented",
+      "findings": 0
+    },
+    {
+      "id": "variable-inserted",
+      "level": "error",
+      "kind": "documented",
+      "findings": 0
+    },
+    {
+      "id": "gap-mismatch",
+      "level": "error",
+      "kind": "documented",
+      "findings": 0
+    },
+    {
+      "id": "gap-removed",
+      "level": "warning",
+      "kind": "best practice",
+      "findings": 0
+    },
+    {
+      "id": "inheritance-order-changed",
+      "level": "error",
+      "kind": "documented",
+      "findings": 0
+    },
+    {
+      "id": "namespace-removed",
+      "level": "error",
+      "kind": "documented",
+      "findings": 0
+    },
+    {
+      "id": "proxy-slot-overlap",
+      "level": "error",
+      "kind": "documented",
+      "findings": 0
+    },
+    {
+      "id": "variable-renamed",
+      "level": "info",
+      "kind": "documented",
+      "findings": 1
+    },
+    {
+      "id": "type-renamed",
+      "level": "info",
+      "kind": "best practice",
+      "findings": 1
+    },
+    {
+      "id": "type-extended",
+      "level": "info",
+      "kind": "best practice",
+      "findings": 2
+    }
+  ],
+  "config": {
+    "minSeverity": "info",
+    "failOn": "error"
+  },
+  "findings": [
+    {
+      "id": "type-extended",
+      "severity": "info",
+      "message": "The type of Vault.positions grows without moving what was stored: rewardDebt is appended to struct Vault.Position, which is stored as the value of a mapping, so each entry grows at its own hashed slot. This is a best practice of this tool, not a rule in the Solidity or OpenZeppelin documentation.",
+      "side": "new",
+      "file": "examples/v2-good/layout.json",
+      "line": 94,
+      "column": 16,
+      "at": "examples/v2-good/layout.json:94",
+      "contract": "Vault",
+      "variable": "positions",
+      "namespace": null,
+      "fix": "Confirm that the code handles what was stored before the upgrade: appended struct members read as zero there.",
+      "kind": "best practice"
+    },
+    {
+      "id": "type-extended",
+      "severity": "info",
+      "message": "The type of Vault.mode grows without moving what was stored: Retired is appended to enum Vault.Mode, and the old members keep their numbers. This is a best practice of this tool, not a rule in the Solidity or OpenZeppelin documentation.",
+      "side": "new",
+      "file": "examples/v2-good/layout.json",
+      "line": 110,
+      "column": 16,
+      "at": "examples/v2-good/layout.json:110",
+      "contract": "Vault",
+      "variable": "mode",
+      "namespace": null,
+      "fix": "Confirm that the code handles what was stored before the upgrade: appended struct members read as zero there.",
+      "kind": "best practice"
+    },
+    {
+      "id": "variable-renamed",
+      "severity": "info",
+      "message": "Vault.note is renamed memo at the same slot 117, offset 0 with the same storage form, so memo starts with the value of note.",
+      "side": "new",
+      "file": "examples/v2-good/layout.json",
+      "line": 126,
+      "column": 16,
+      "at": "examples/v2-good/layout.json:126",
+      "contract": "Vault",
+      "variable": "memo",
+      "namespace": null,
+      "fix": "Confirm that the variable means the same as before, since it starts with the old value.",
+      "kind": "documented"
+    },
+    {
+      "id": "type-renamed",
+      "severity": "info",
+      "message": "The type of token in namespace erc7201:example.vault.rewards keeps its storage form: contract IERC20 is now address, with the same storage form. This is a best practice of this tool, not a rule in the Solidity or OpenZeppelin documentation.",
+      "side": "new",
+      "file": "examples/v2-good/layout.json",
+      "line": 335,
+      "column": 18,
+      "at": "examples/v2-good/layout.json:335",
+      "contract": null,
+      "variable": "token",
+      "namespace": "erc7201:example.vault.rewards",
+      "fix": "Confirm that the stored values mean the same under the new type.",
+      "kind": "best practice"
+    }
+  ],
+  "notes": [],
+  "notice": "This report is an input to a review before an upgrade is deployed: not a security audit and not a guarantee that the upgrade is safe.",
+  "result": {
+    "pass": true,
+    "failOn": "error",
+    "text": "PASS - no finding at or above error (4 info)"
+  }
+}

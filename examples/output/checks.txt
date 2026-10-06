@@ -1,0 +1,18 @@
+storage-layout-check checks
+
+  layout-unreadable          error    input          a file is not JSON the reader can follow, or holds no storage layout in a form the tool reads (a layout object, an artifact with storageLayout, a compiler output with contracts)
+  layout-incomplete          warning  input          a variable or a type of a layout lacks what the comparison needs (a label, slot, offset or type, a size, a type that is not in types); that part was not compared
+  variable-removed           error    documented     a variable of the old layout is not in the new one, under its name or at its place
+  variable-moved             error    documented     a variable is at another slot or offset in the new layout
+  type-changed               error    documented     a variable keeps its name and gets a type with another storage form: another size or signedness, another mapping key or value, other struct members, another array length, or enum members removed or reordered
+  variable-inserted          error    documented     a new variable takes storage that a variable of the old layout used, as happens when it is declared before existing ones or in a base contract with no room
+  gap-mismatch               error    documented     the slots added before a storage gap in a contract are not the slots the gap was cut by, so what follows the gap moves
+  gap-removed                warning  best practice  a contract that had a storage gap has none in the new layout
+  inheritance-order-changed  error    documented     the contracts that hold storage come in another order in the new layout
+  namespace-removed          error    documented     an ERC-7201 namespace of the old layout is not in the new one
+  proxy-slot-overlap         error    documented     a variable of the new layout takes a slot that ERC-1967 sets aside for a proxy (the logic contract, the beacon or the admin)
+  variable-renamed           info     documented     a variable of the old layout has a new name, or is declared in another contract, at the same slot and offset with the same storage form, so it keeps the old value
+  type-renamed               info     best practice  a variable keeps its place and its storage form under another type name: a contract type and address, string and bytes, a renamed struct or enum, a user-defined value type
+  type-extended              info     best practice  members were appended to a struct stored as a mapping value or within its old size, or to an enum, and what was stored keeps its place
+
+A documented check rests on the Solidity or OpenZeppelin documentation or on an ERC; a best practice check is this tool's own choice and says so in its message. An input check is about a file itself.

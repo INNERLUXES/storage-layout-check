@@ -1,0 +1,327 @@
+{
+  "storage": [
+    {
+      "astId": 12,
+      "contract": "src/AccessBase.sol:AccessBase",
+      "label": "owner",
+      "offset": 0,
+      "slot": "0",
+      "type": "t_address"
+    },
+    {
+      "astId": 13,
+      "contract": "src/AccessBase.sol:AccessBase",
+      "label": "__gap",
+      "offset": 0,
+      "slot": "1",
+      "type": "t_array(t_uint256)49_storage"
+    },
+    {
+      "astId": 14,
+      "contract": "src/FeeBase.sol:FeeBase",
+      "label": "feeRate",
+      "offset": 0,
+      "slot": "50",
+      "type": "t_uint16"
+    },
+    {
+      "astId": 15,
+      "contract": "src/FeeBase.sol:FeeBase",
+      "label": "treasury",
+      "offset": 2,
+      "slot": "50",
+      "type": "t_address"
+    },
+    {
+      "astId": 16,
+      "contract": "src/FeeBase.sol:FeeBase",
+      "label": "__gap",
+      "offset": 0,
+      "slot": "51",
+      "type": "t_array(t_uint256)49_storage"
+    },
+    {
+      "astId": 17,
+      "contract": "src/ListBase.sol:ListBase",
+      "label": "allowed",
+      "offset": 0,
+      "slot": "100",
+      "type": "t_mapping(t_address,t_bool)"
+    },
+    {
+      "astId": 18,
+      "contract": "src/ListBase.sol:ListBase",
+      "label": "__gap",
+      "offset": 0,
+      "slot": "101",
+      "type": "t_array(t_uint256)9_storage"
+    },
+    {
+      "astId": 19,
+      "contract": "src/Vault.sol:Vault",
+      "label": "balances",
+      "offset": 0,
+      "slot": "110",
+      "type": "t_mapping(t_address,t_uint256)"
+    },
+    {
+      "astId": 20,
+      "contract": "src/Vault.sol:Vault",
+      "label": "totalShares",
+      "offset": 0,
+      "slot": "111",
+      "type": "t_uint256"
+    },
+    {
+      "astId": 21,
+      "contract": "src/Vault.sol:Vault",
+      "label": "positions",
+      "offset": 0,
+      "slot": "112",
+      "type": "t_mapping(t_uint256,t_struct(Position)3_storage)"
+    },
+    {
+      "astId": 22,
+      "contract": "src/Vault.sol:Vault",
+      "label": "paused",
+      "offset": 0,
+      "slot": "113",
+      "type": "t_bool"
+    },
+    {
+      "astId": 23,
+      "contract": "src/Vault.sol:Vault",
+      "label": "mode",
+      "offset": 1,
+      "slot": "113",
+      "type": "t_enum(Mode)10"
+    },
+    {
+      "astId": 24,
+      "contract": "src/Vault.sol:Vault",
+      "label": "history",
+      "offset": 0,
+      "slot": "114",
+      "type": "t_array(t_uint256)3_storage"
+    },
+    {
+      "astId": 25,
+      "contract": "src/Vault.sol:Vault",
+      "label": "note",
+      "offset": 0,
+      "slot": "117",
+      "type": "t_string_storage"
+    },
+    {
+      "astId": 26,
+      "contract": "src/Vault.sol:Vault",
+      "label": "limit",
+      "offset": 0,
+      "slot": "118",
+      "type": "t_int128"
+    }
+  ],
+  "types": {
+    "t_address": {
+      "encoding": "inplace",
+      "label": "address",
+      "numberOfBytes": "20"
+    },
+    "t_array(t_uint256)3_storage": {
+      "base": "t_uint256",
+      "encoding": "inplace",
+      "label": "uint256[3]",
+      "numberOfBytes": "96"
+    },
+    "t_array(t_uint256)49_storage": {
+      "base": "t_uint256",
+      "encoding": "inplace",
+      "label": "uint256[49]",
+      "numberOfBytes": "1568"
+    },
+    "t_array(t_uint256)9_storage": {
+      "base": "t_uint256",
+      "encoding": "inplace",
+      "label": "uint256[9]",
+      "numberOfBytes": "288"
+    },
+    "t_bool": {
+      "encoding": "inplace",
+      "label": "bool",
+      "numberOfBytes": "1"
+    },
+    "t_contract(IERC20)11": {
+      "encoding": "inplace",
+      "label": "contract IERC20",
+      "numberOfBytes": "20"
+    },
+    "t_enum(Mode)10": {
+      "encoding": "inplace",
+      "label": "enum Vault.Mode",
+      "members": [
+        "Open",
+        "Paused",
+        "Closed"
+      ],
+      "numberOfBytes": "1"
+    },
+    "t_int128": {
+      "encoding": "inplace",
+      "label": "int128",
+      "numberOfBytes": "16"
+    },
+    "t_mapping(t_address,t_bool)": {
+      "encoding": "mapping",
+      "key": "t_address",
+      "label": "mapping(address => bool)",
+      "numberOfBytes": "32",
+      "value": "t_bool"
+    },
+    "t_mapping(t_address,t_struct(Stake)7_storage)": {
+      "encoding": "mapping",
+      "key": "t_address",
+      "label": "mapping(address => struct Vault.Stake)",
+      "numberOfBytes": "32",
+      "value": "t_struct(Stake)7_storage"
+    },
+    "t_mapping(t_address,t_uint256)": {
+      "encoding": "mapping",
+      "key": "t_address",
+      "label": "mapping(address => uint256)",
+      "numberOfBytes": "32",
+      "value": "t_uint256"
+    },
+    "t_mapping(t_uint256,t_struct(Position)3_storage)": {
+      "encoding": "mapping",
+      "key": "t_uint256",
+      "label": "mapping(uint256 => struct Vault.Position)",
+      "numberOfBytes": "32",
+      "value": "t_struct(Position)3_storage"
+    },
+    "t_string_storage": {
+      "encoding": "bytes",
+      "label": "string",
+      "numberOfBytes": "32"
+    },
+    "t_struct(Position)3_storage": {
+      "encoding": "inplace",
+      "label": "struct Vault.Position",
+      "members": [
+        {
+          "astId": 4,
+          "contract": "src/Vault.sol:Vault",
+          "label": "owner",
+          "offset": 0,
+          "slot": "0",
+          "type": "t_address"
+        },
+        {
+          "astId": 5,
+          "contract": "src/Vault.sol:Vault",
+          "label": "shares",
+          "offset": 0,
+          "slot": "1",
+          "type": "t_uint128"
+        },
+        {
+          "astId": 6,
+          "contract": "src/Vault.sol:Vault",
+          "label": "since",
+          "offset": 16,
+          "slot": "1",
+          "type": "t_uint64"
+        }
+      ],
+      "numberOfBytes": "64"
+    },
+    "t_struct(Stake)7_storage": {
+      "encoding": "inplace",
+      "label": "struct Vault.Stake",
+      "members": [
+        {
+          "astId": 8,
+          "contract": "src/Vault.sol:Vault",
+          "label": "amount",
+          "offset": 0,
+          "slot": "0",
+          "type": "t_uint256"
+        },
+        {
+          "astId": 9,
+          "contract": "src/Vault.sol:Vault",
+          "label": "start",
+          "offset": 0,
+          "slot": "1",
+          "type": "t_uint64"
+        }
+      ],
+      "numberOfBytes": "64"
+    },
+    "t_uint128": {
+      "encoding": "inplace",
+      "label": "uint128",
+      "numberOfBytes": "16"
+    },
+    "t_uint16": {
+      "encoding": "inplace",
+      "label": "uint16",
+      "numberOfBytes": "2"
+    },
+    "t_uint256": {
+      "encoding": "inplace",
+      "label": "uint256",
+      "numberOfBytes": "32"
+    },
+    "t_uint64": {
+      "encoding": "inplace",
+      "label": "uint64",
+      "numberOfBytes": "8"
+    }
+  },
+  "namespaces": {
+    "erc7201:example.vault.rewards": [
+      {
+        "astId": 27,
+        "contract": "src/Vault.sol:Vault",
+        "label": "rate",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 28,
+        "contract": "src/Vault.sol:Vault",
+        "label": "lastUpdate",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_uint64"
+      },
+      {
+        "astId": 29,
+        "contract": "src/Vault.sol:Vault",
+        "label": "token",
+        "offset": 8,
+        "slot": "1",
+        "type": "t_contract(IERC20)11"
+      },
+      {
+        "astId": 30,
+        "contract": "src/Vault.sol:Vault",
+        "label": "stakes",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_mapping(t_address,t_struct(Stake)7_storage)"
+      }
+    ],
+    "erc7201:example.vault.legacy": [
+      {
+        "astId": 31,
+        "contract": "src/Vault.sol:Vault",
+        "label": "oldRate",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_uint256"
+      }
+    ]
+  }
+}
