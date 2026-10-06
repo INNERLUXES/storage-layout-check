@@ -1,0 +1,15 @@
+# Every change is reviewed by a maintainer.
+* @innerluxesdev
+
+# The JSON reader, the reading of the files, the layout forms, the comparison of types, the checks, the points of the
+# public pages, the rules and the output decide every result and what is read from the disk; changes need extra care.
+/src/json.js @innerluxesdev
+/src/files.js @innerluxesdev
+/src/layout.js @innerluxesdev
+/src/types.js @innerluxesdev
+/src/compare.js @innerluxesdev
+/src/data.js @innerluxesdev
+/src/rules.js @innerluxesdev
+/src/check.js @innerluxesdev
+/src/report.js @innerluxesdev
+/research/ @innerluxesdev
