@@ -1,0 +1,51 @@
+{
+  "name": "storage-layout-check",
+  "version": "1.0.0",
+  "description": "Storage layout check: compares the storage layout of two versions of an upgradeable Solidity contract, as the compiler, forge inspect or an artifact writes it, reads the two files only, compiles nothing and runs nothing, and lists the changes that would corrupt storage behind a proxy before the upgrade is deployed: variables removed, moved or inserted before existing ones, types changed in size, signedness, mapping key or value, struct members, array length or enum members, storage gaps cut by the wrong number of slots or removed, base contracts in another order, ERC-7201 namespaces removed and variables on the ERC-1967 proxy slots, with renamed variables and types as notes. Text, markdown, JSON and SARIF output, exit codes for a pipeline, no dependencies.",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "bin": {
+    "storage-layout-check": "bin/storage-layout-check.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "docs",
+    "examples",
+    "research",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.js\"",
+    "test:coverage": "node --test --experimental-test-coverage \"test/*.test.js\"",
+    "check": "node tools/check.mjs",
+    "example": "node tools/example.mjs"
+  },
+  "keywords": [
+    "solidity",
+    "smart-contracts",
+    "upgradeable-contracts",
+    "storage-layout",
+    "proxy",
+    "erc-1967",
+    "erc-7201",
+    "openzeppelin",
+    "static-analysis",
+    "sarif",
+    "cli"
+  ],
+  "author": "INNERLUXES <info@innerluxes.dev>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/INNERLUXES/storage-layout-check.git"
+  },
+  "homepage": "https://innerluxes.dev/blockchain/smart-contracts-development"
+}

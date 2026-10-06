@@ -1,0 +1,17 @@
+* text=auto eol=lf
+# The example layouts are kept byte for byte as written, so a test can read them with LF and with CRLF line ends and as
+# UTF-16.
+examples/v1/** -text
+examples/v2-bad/** -text
+examples/v2-good/** -text
+# The example output is kept as the tool writes it.
+examples/output/** -text
+# The saved copies of the public pages are kept as they were read.
+research/sources/** -text
+# The layouts of the examples are made-up input, not code of this project.
+examples/** linguist-documentation
+examples/** linguist-detectable=false
+examples/** linguist-vendored
+research/sources/** linguist-documentation
+research/sources/** linguist-detectable=false
+research/sources/** linguist-vendored
